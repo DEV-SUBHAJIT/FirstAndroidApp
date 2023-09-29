@@ -39,7 +39,7 @@
             app:cardElevation="6dp">
 
             <EditText
-                android:id="@+id/etEmail"
+                    android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:background="@null"

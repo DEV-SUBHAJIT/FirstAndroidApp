@@ -1,14 +1,13 @@
 package com.example.firstapp;
 
 public class User {
-    private String id, name, email, password, confirmPassword;
+    private String id, Name, Qmail, Password;
 
-    public User(String id, String name, String email, String password, String confirmPassword) {
+    public User(String id, String name, String qmail, String password) {
         this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.confirmPassword = confirmPassword;
+        Name = name;
+        Qmail = qmail;
+        Password = password;
     }
 
     public String getId() {
@@ -16,18 +15,14 @@ public class User {
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getQmail() {
+        return Qmail;
     }
 
     public String getPassword() {
-        return password;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
+        return Password;
     }
 }

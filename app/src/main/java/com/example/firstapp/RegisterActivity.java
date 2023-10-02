@@ -48,6 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
         etName = findViewById(R.id.etName);
         et1Email = findViewById(R.id.et1Email);
         et1Password = findViewById(R.id.et1Password);
+
         et2Password = findViewById(R.id.et2Password);
         progressBar = findViewById(R.id.progressBar);
 
@@ -61,13 +62,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         });
 
-        imarrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        imarrow.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         btnSignup.setOnClickListener(v -> {

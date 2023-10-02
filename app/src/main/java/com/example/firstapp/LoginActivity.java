@@ -7,14 +7,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -22,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView tvRegister;
     DatabaseReference myRef;
     FirebaseDatabase database;
+    FirebaseAuth mAuth;
 
     String email, password;
     EditText etEmail, etPassword;
@@ -36,7 +40,8 @@ public class LoginActivity extends AppCompatActivity {
         tvRegister = findViewById(R.id.tvRegister);
 
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("User");
+        myRef = database.getReference("users");
+        mAuth = FirebaseAuth.getInstance();
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -46,34 +51,24 @@ public class LoginActivity extends AppCompatActivity {
             email = etEmail.getText().toString().trim();
             password = etPassword.getText().toString().trim();
 
-            Query query = myRef.child("User").orderByChild("email").equalTo(email);
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        // dataSnapshot is the "issue" node with all children with id 0
 
-                        for (DataSnapshot user : dataSnapshot.getChildren()) {
-                            // do something with the individual "issues"
-                            User mUser = user.getValue(User.class);
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            String uId = user.getUid();
+                            getUserDetails(uId);
 
-                            if (mUser.getPassword().equals(password)) {
-                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(LoginActivity.this, "Password is wrong", Toast.LENGTH_LONG).show();
-                            }
+                        } else {
+                            // If sign in fails, display a message to the user.
+
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+
                         }
-                    } else {
-                        Toast.makeText(LoginActivity.this, "User not found", Toast.LENGTH_LONG).show();
-                    }
-                }
+                    });
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
         });
 
         tvRegister.setOnClickListener(v -> {
@@ -82,5 +77,15 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void getUserDetails(String uId) {
+        myRef.child(uId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(LoginActivity.this, "User details found", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(LoginActivity.this, "" + String.valueOf(task.getResult().getValue()), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

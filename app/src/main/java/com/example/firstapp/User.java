@@ -1,21 +1,21 @@
 package com.example.firstapp;
 
 public class User {
-    private String Name, Email, Phone, Password;
+    private String name, email, phone, password;
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public String getPhone() {
-        return Phone;
+        return phone;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 }

@@ -79,7 +79,15 @@ public class LoginActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 User user = task.getResult().getValue(User.class);
 
-                Toast.makeText(LoginActivity.this, "Welcome " + user.getName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                intent.putExtra("name", user.getName());
+                intent.putExtra("email", email);
+                intent.putExtra("password", user.getPassword());
+                intent.putExtra("userId", uId);
+                intent.putExtra("pinCode", 700091);
+                intent.putExtra("isLogin", true);
+
+                startActivity(intent);
             } else {
                 Toast.makeText(LoginActivity.this, "" + String.valueOf(task.getResult().getValue()), Toast.LENGTH_SHORT).show();
             }

@@ -125,9 +125,10 @@ public class RegisterActivity extends AppCompatActivity {
                             }
 
 
-                            myRef.child(userId).child("Name").setValue(name);
-                            myRef.child(userId).child("Email").setValue(email);
-                            myRef.child(userId).child("Password").setValue(password);
+                            myRef.child(userId).child("name").setValue(name);
+                            myRef.child(userId).child("email").setValue(email);
+                            myRef.child(userId).child("phone").setValue("");
+                            myRef.child(userId).child("password").setValue(password);
 
 
                             // Read from the database

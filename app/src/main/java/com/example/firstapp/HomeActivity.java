@@ -9,10 +9,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -23,6 +28,7 @@ public class HomeActivity extends AppCompatActivity {
     TextView textView;
     ImageView ivImage1, ivBanner;
     LinearLayout rootLayout;
+    RecyclerView rvEmployees;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +36,12 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         rootLayout = findViewById(R.id.rootLayout);
-        textView = findViewById(R.id.textView);
-        ivImage1 = findViewById(R.id.ivImage1);
+        textView = findViewById(R.id.tvImageName);
+        ivImage1 = findViewById(R.id.imageView);
         ivBanner = findViewById(R.id.ivBanner);
+        rvEmployees = findViewById(R.id.rvEmployees);
+
+        setEmployee();
 
         Picasso.get().load("https://wallpapers.com/images/hd/hd-vacation-house-in-the-beach-j4jasqgcc5ismew8.jpg")
                 .placeholder(R.drawable.shopping_image)
@@ -59,5 +68,17 @@ public class HomeActivity extends AppCompatActivity {
             Snackbar.make(rootLayout, "Intent value not found", Snackbar.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void setEmployee() {
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.add(new Employee("Nilanjan Sarkar", "nilanjan32@gmail.com", "8565421456", "21", "Ichapur, North 24 Parganas, West Bengal, India"));
+        employeeList.add(new Employee("Taps Hira", "tapashira@gmail.com", "76584698532", "29", "Ichapur, North 24 Parganas, West Bengal, India"));
+        employeeList.add(new Employee("Subhajit Roy", "subhajitroy@gmail.com", "8620828385", "27", "Chakdah, Nadia, West Bengal, India"));
+
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(employeeList);
+        rvEmployees.setHasFixedSize(true);
+        rvEmployees.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
+        rvEmployees.setAdapter(adapter);
     }
 }

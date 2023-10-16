@@ -2,13 +2,17 @@ package com.example.firstapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
+import com.squareup.picasso.Picasso;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -17,6 +21,7 @@ public class HomeActivity extends AppCompatActivity {
     int pinCode;
     boolean loginStatus;
     TextView textView;
+    ImageView ivImage1, ivBanner;
     LinearLayout rootLayout;
 
     @Override
@@ -26,6 +31,16 @@ public class HomeActivity extends AppCompatActivity {
 
         rootLayout = findViewById(R.id.rootLayout);
         textView = findViewById(R.id.textView);
+        ivImage1 = findViewById(R.id.ivImage1);
+        ivBanner = findViewById(R.id.ivBanner);
+
+        Picasso.get().load("https://wallpapers.com/images/hd/hd-vacation-house-in-the-beach-j4jasqgcc5ismew8.jpg")
+                .placeholder(R.drawable.shopping_image)
+                .into(ivImage1);
+
+        Glide.with(HomeActivity.this).load("https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_640.jpg")
+                .placeholder(R.drawable.shopping_image)
+                .into(ivBanner);
 
         getValue = getIntent();
 

@@ -1,6 +1,7 @@
 package com.example.firstapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +30,17 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        SharedPreferences pref = getSharedPreferences("LoginDetails", MODE_PRIVATE);
+
+        // The value will be default as empty string because for the very
+        // first time when the app is opened, there is nothing to show
+        boolean isLogin = pref.getBoolean("isLoggedIn", false);
+
+        if (isLogin) {
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
+        }
 
         //Initilize
         btnLogin = findViewById(R.id.btnLogin);
@@ -78,6 +90,14 @@ public class LoginActivity extends AppCompatActivity {
         myRef.child(uId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 User user = task.getResult().getValue(User.class);
+
+                SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putString("UserName", user.getName());
+                editor.putString("UserEmail", user.getEmail());
+                editor.putBoolean("isLoggedIn", true);
+                editor.apply();
 
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                 intent.putExtra("name", user.getName());

@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -80,13 +81,14 @@ public class HomeActivity extends AppCompatActivity {
     private void getApiData() {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://jsonplaceholder.typicode.com/todos/10";
+        String url = "https://jsonplaceholder.typicode.com/todos/1";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
+
                     int userId = jsonObject.getInt("userId");
                     int id = jsonObject.getInt("id");
                     String title = jsonObject.getString("title");
@@ -94,7 +96,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     textView.setText("User id : "+userId + "\n"+
                                    "Id : "+ id + "\n"+
-                           "itle : " + title + "\n"+
+                           "title : " + title + "\n"+
                           "completed : "+   completed + "\n");
                 } catch (JSONException e) {
                     throw new RuntimeException(e);

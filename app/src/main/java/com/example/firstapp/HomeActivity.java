@@ -12,9 +12,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     int pinCode;
     boolean loginStatus;
     TextView textView;
-    ImageView ivImage1, ivBanner;
+    ImageView /*ivImage1,*/ ivBanner;
     LinearLayout rootLayout;
     RecyclerView rvEmployees;
 
@@ -37,15 +46,16 @@ public class HomeActivity extends AppCompatActivity {
 
         rootLayout = findViewById(R.id.rootLayout);
         textView = findViewById(R.id.tvImageName);
-        ivImage1 = findViewById(R.id.imageView);
+//        ivImage1 = findViewById(R.id.imageView);
         ivBanner = findViewById(R.id.ivBanner);
         rvEmployees = findViewById(R.id.rvEmployees);
 
+        getApiData();
         setEmployee();
 
-        Picasso.get().load("https://wallpapers.com/images/hd/hd-vacation-house-in-the-beach-j4jasqgcc5ismew8.jpg")
+      /*  Picasso.get().load("https://wallpapers.com/images/hd/hd-vacation-house-in-the-beach-j4jasqgcc5ismew8.jpg")
                 .placeholder(R.drawable.shopping_image)
-                .into(ivImage1);
+                .into(ivImage1);*/
 
         Glide.with(HomeActivity.this).load("https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_640.jpg")
                 .placeholder(R.drawable.shopping_image)
@@ -60,14 +70,45 @@ public class HomeActivity extends AppCompatActivity {
             mPassword = getValue.getStringExtra("password");
             pinCode = getValue.getIntExtra("pinCode", -1);
             loginStatus = getValue.getBooleanExtra("isLogin",false);
-
-            textView.setText(nName+ "\n"+ nEmail + "\n"+ mPassword + "\n"+ pinCode + "\n"+ loginStatus);
-            Toast.makeText(this, "" + nEmail, Toast.LENGTH_SHORT).show();
         } else {
             //Show Snackbar
             Snackbar.make(rootLayout, "Intent value not found", Snackbar.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void getApiData() {
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://jsonplaceholder.typicode.com/todos/10";
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    int userId = jsonObject.getInt("userId");
+                    int id = jsonObject.getInt("id");
+                    String title = jsonObject.getString("title");
+                    boolean completed = jsonObject.getBoolean("completed");
+
+                    textView.setText("User id : "+userId + "\n"+
+                                   "Id : "+ id + "\n"+
+                           "itle : " + title + "\n"+
+                          "completed : "+   completed + "\n");
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        queue.add(request);
     }
 
     private void setEmployee() {

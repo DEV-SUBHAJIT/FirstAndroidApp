@@ -3,8 +3,10 @@ package com.example.firstapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
     ImageView /*ivImage1,*/ ivBanner;
     LinearLayout rootLayout;
     RecyclerView rvEmployees;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +53,11 @@ public class HomeActivity extends AppCompatActivity {
 //        ivImage1 = findViewById(R.id.imageView);
         ivBanner = findViewById(R.id.ivBanner);
         rvEmployees = findViewById(R.id.rvEmployees);
+        progressBar = findViewById(R.id.progressBar);
 
         getApiData();
-        setEmployee();
+//        setEmployee();
+        getPhotoList();
 
       /*  Picasso.get().load("https://wallpapers.com/images/hd/hd-vacation-house-in-the-beach-j4jasqgcc5ismew8.jpg")
                 .placeholder(R.drawable.shopping_image)
@@ -76,6 +81,29 @@ public class HomeActivity extends AppCompatActivity {
             Snackbar.make(rootLayout, "Intent value not found", Snackbar.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void getPhotoList() {
+        String photoApiUrl = "https://picsum.photos/v2/list?page=1&limit=10";
+//        String photoApiUrl = "https://jsonplaceholder.typicode.com/albums/1/photos";
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest request = new StringRequest(Request.Method.GET, photoApiUrl, response -> {
+            try {
+                progressBar.setVisibility(View.GONE);
+                JSONArray apiResponse = new JSONArray(response);
+                PhotoAdapter adapter = new PhotoAdapter(apiResponse);
+                rvEmployees.setHasFixedSize(true);
+                rvEmployees.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
+                rvEmployees.setAdapter(adapter);
+
+            } catch (JSONException e) {
+                Toast.makeText(HomeActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }, error -> {
+            Toast.makeText(HomeActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
+        });
+        queue.add(request);
     }
 
     private void getApiData() {

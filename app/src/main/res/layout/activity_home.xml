@@ -58,11 +58,18 @@
                         android:layout_height="match_parent"
                         android:layout_margin="12dp"
                         android:gravity="center_vertical"
-                        android:text="Image Name"
+                        android:text="Loading..."
                         app:layout_constraintBottom_toBottomOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
+            <ProgressBar
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:id="@+id/progressBar"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvEmployees"

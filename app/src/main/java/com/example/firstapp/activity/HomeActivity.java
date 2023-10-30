@@ -1,8 +1,7 @@
-package com.example.firstapp;
+package com.example.firstapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,8 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,8 +22,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.example.firstapp.adapter.PhotoAdapter;
+import com.example.firstapp.R;
+import com.example.firstapp.adapter.RecyclerViewAdapter;
+import com.example.firstapp.model.Employee;
 import com.google.android.material.snackbar.Snackbar;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -93,7 +97,9 @@ public class HomeActivity extends AppCompatActivity {
                 JSONArray apiResponse = new JSONArray(response);
                 PhotoAdapter adapter = new PhotoAdapter(apiResponse);
                 rvEmployees.setHasFixedSize(true);
-                rvEmployees.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
+//                rvEmployees.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
+//                rvEmployees.setLayoutManager(new GridLayoutManager(HomeActivity.this,2));
+                rvEmployees.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
                 rvEmployees.setAdapter(adapter);
 
             } catch (JSONException e) {

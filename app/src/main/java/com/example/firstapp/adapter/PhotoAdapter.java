@@ -1,4 +1,4 @@
-package com.example.firstapp;
+package com.example.firstapp.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,7 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
+import com.example.firstapp.R;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;

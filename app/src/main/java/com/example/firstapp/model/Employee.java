@@ -1,33 +1,47 @@
 package com.example.firstapp.model;
 
 public class Employee {
-    private String name, email, phone, age, address;
+    int id, age;
+    String imageUrl, firstName, lastName, email, contactNumber, dob, address;
+    Double salary;
 
-    public Employee(String name, String email, String phone, String age, String address) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.age = age;
-        this.address = address;
+    public int getId() {
+        return id;
     }
 
-    public String getName() {
-        return name;
+    public int getAge() {
+        return age;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getContactNumber() {
+        return contactNumber;
     }
 
-    public String getAge() {
-        return age;
+    public String getDob() {
+        return dob;
     }
 
     public String getAddress() {
         return address;
+    }
+
+    public Double getSalary() {
+        return salary;
     }
 }

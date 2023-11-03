@@ -31,11 +31,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.MyViewHolder holder, int position) {
         Employee employee = employeeList.get(position);
 
-       holder.tvName.setText("Name: "+ employee.getName());
+      /* holder.tvName.setText("Name: "+ employee.getName());
        holder.tvEmail.setText("Name: "+ employee.getEmail());
        holder.tvPhone.setText("Name: "+ employee.getPhone());
        holder.tvAge.setText("Name: "+ employee.getAge());
-       holder.tvAddress.setText("Name: "+ employee.getAddress());
+       holder.tvAddress.setText("Name: "+ employee.getAddress());*/
     }
 
     @Override

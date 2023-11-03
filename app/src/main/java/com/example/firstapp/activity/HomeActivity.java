@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
     int pinCode;
     boolean loginStatus;
     TextView textView;
-    ImageView /*ivImage1,*/ ivBanner;
+    ImageView /*ivImage1,*/ ivBanner, ivEmployee;
     LinearLayout rootLayout;
     RecyclerView rvEmployees;
     ProgressBar progressBar;
@@ -52,13 +52,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        rootLayout = findViewById(R.id.rootLayout);
-        textView = findViewById(R.id.tvImageName);
-//        ivImage1 = findViewById(R.id.imageView);
-        ivBanner = findViewById(R.id.ivBanner);
-        rvEmployees = findViewById(R.id.rvEmployees);
-        progressBar = findViewById(R.id.progressBar);
-
+        initView();
+        clickEvent();
         getApiData();
 //        setEmployee();
         getPhotoList();
@@ -85,6 +80,23 @@ public class HomeActivity extends AppCompatActivity {
             Snackbar.make(rootLayout, "Intent value not found", Snackbar.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void clickEvent() {
+        ivEmployee.setOnClickListener(v -> {
+            startActivity(new Intent(this, EmployeeActivity.class));
+        });
+    }
+
+    private void initView() {
+        rootLayout = findViewById(R.id.rootLayout);
+        textView = findViewById(R.id.tvImageName);
+//        ivImage1 = findViewById(R.id.imageView);
+        ivBanner = findViewById(R.id.ivBanner);
+        rvEmployees = findViewById(R.id.rvEmployees);
+        progressBar = findViewById(R.id.progressBar);
+
+        ivEmployee = findViewById(R.id.ivEmployee);
     }
 
     private void getPhotoList() {
@@ -116,6 +128,7 @@ public class HomeActivity extends AppCompatActivity {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://jsonplaceholder.typicode.com/todos/1";
+
 
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -149,9 +162,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setEmployee() {
         List<Employee> employeeList = new ArrayList<>();
-        employeeList.add(new Employee("Nilanjan Sarkar", "nilanjan32@gmail.com", "8565421456", "21", "Ichapur, North 24 Parganas, West Bengal, India"));
-        employeeList.add(new Employee("Taps Hira", "tapashira@gmail.com", "76584698532", "29", "Ichapur, North 24 Parganas, West Bengal, India"));
-        employeeList.add(new Employee("Subhajit Roy", "subhajitroy@gmail.com", "8620828385", "27", "Chakdah, Nadia, West Bengal, India"));
 
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(employeeList);
         rvEmployees.setHasFixedSize(true);

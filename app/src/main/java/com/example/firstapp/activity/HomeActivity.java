@@ -84,7 +84,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private void clickEvent() {
         ivEmployee.setOnClickListener(v -> {
-            startActivity(new Intent(this, EmployeeActivity.class));
+//            startActivity(new Intent(this, EmployeeActivity.class));
+            startActivity(new Intent(this, UserListActivity.class));
         });
     }
 

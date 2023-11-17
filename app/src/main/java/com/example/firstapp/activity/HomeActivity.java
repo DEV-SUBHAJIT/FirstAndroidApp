@@ -3,6 +3,7 @@ package com.example.firstapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -10,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -22,8 +22,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.example.firstapp.adapter.PhotoAdapter;
 import com.example.firstapp.R;
+import com.example.firstapp.adapter.PhotoAdapter;
 import com.example.firstapp.adapter.RecyclerViewAdapter;
 import com.example.firstapp.model.Employee;
 import com.google.android.material.snackbar.Snackbar;
@@ -46,6 +46,7 @@ public class HomeActivity extends AppCompatActivity {
     LinearLayout rootLayout;
     RecyclerView rvEmployees;
     ProgressBar progressBar;
+    private Button btnPost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class HomeActivity extends AppCompatActivity {
             userId = getValue.getStringExtra("userId");
             mPassword = getValue.getStringExtra("password");
             pinCode = getValue.getIntExtra("pinCode", -1);
-            loginStatus = getValue.getBooleanExtra("isLogin",false);
+            loginStatus = getValue.getBooleanExtra("isLogin", false);
         } else {
             //Show Snackbar
             Snackbar.make(rootLayout, "Intent value not found", Snackbar.LENGTH_SHORT).show();
@@ -87,6 +88,10 @@ public class HomeActivity extends AppCompatActivity {
 //            startActivity(new Intent(this, EmployeeActivity.class));
             startActivity(new Intent(this, UserListActivity.class));
         });
+
+        btnPost.setOnClickListener(view -> {
+            startActivity(new Intent(this, PostActivity.class));
+        });
     }
 
     private void initView() {
@@ -98,6 +103,7 @@ public class HomeActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
 
         ivEmployee = findViewById(R.id.ivEmployee);
+        btnPost = findViewById(R.id.btnPost);
     }
 
     private void getPhotoList() {
@@ -116,7 +122,7 @@ public class HomeActivity extends AppCompatActivity {
                 rvEmployees.setAdapter(adapter);
 
             } catch (JSONException e) {
-                Toast.makeText(HomeActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }, error -> {
             Toast.makeText(HomeActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
@@ -142,10 +148,10 @@ public class HomeActivity extends AppCompatActivity {
                     String title = jsonObject.getString("title");
                     boolean completed = jsonObject.getBoolean("completed");
 
-                    textView.setText("User id : "+userId + "\n"+
-                                   "Id : "+ id + "\n"+
-                           "title : " + title + "\n"+
-                          "completed : "+   completed + "\n");
+                    textView.setText("User id : " + userId + "\n" +
+                            "Id : " + id + "\n" +
+                            "title : " + title + "\n" +
+                            "completed : " + completed + "\n");
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }

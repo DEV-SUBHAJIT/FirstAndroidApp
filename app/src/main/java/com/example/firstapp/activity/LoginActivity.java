@@ -57,7 +57,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
         btnLogin.setOnClickListener(v -> {
-            email = etEmail.getText().toString().trim();
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+           /* email = etEmail.getText().toString().trim();
             password = etPassword.getText().toString().trim();
 
 
@@ -77,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         }
                     });
-
+*/
         });
 
         tvRegister.setOnClickListener(v -> {

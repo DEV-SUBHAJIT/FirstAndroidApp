@@ -90,7 +90,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         btnPost.setOnClickListener(view -> {
-            startActivity(new Intent(this, PostActivity.class));
+            startActivity(new Intent(this, PostListActivity.class));
         });
     }
 

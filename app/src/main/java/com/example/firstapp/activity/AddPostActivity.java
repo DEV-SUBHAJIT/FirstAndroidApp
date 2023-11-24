@@ -22,12 +22,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PostActivity extends AppCompatActivity {
+public class AddPostActivity extends AppCompatActivity {
 
     private TextInputEditText eietTitle, eietBody, eietUserId;
     private MaterialButton mbtnSave;
@@ -42,7 +41,7 @@ public class PostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.activity_add_post);
         initView();
         clickListener();
     }

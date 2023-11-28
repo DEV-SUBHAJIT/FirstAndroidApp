@@ -2,6 +2,7 @@ package com.example.firstapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -10,7 +11,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -43,10 +48,11 @@ public class HomeActivity extends AppCompatActivity {
     boolean loginStatus;
     TextView textView;
     ImageView /*ivImage1,*/ ivBanner, ivEmployee;
-    LinearLayout rootLayout;
+    DrawerLayout rootLayout;
     RecyclerView rvEmployees;
     ProgressBar progressBar;
     private Button btnPost;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         initView();
+        setNavigation();
         clickEvent();
         getApiData();
 //        setEmployee();
@@ -104,6 +111,19 @@ public class HomeActivity extends AppCompatActivity {
 
         ivEmployee = findViewById(R.id.ivEmployee);
         btnPost = findViewById(R.id.btnPost);
+    }
+
+    private void setNavigation() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, rootLayout, R.string.nav_open, R.string.nav_close);
+
+        setSupportActionBar(toolbar);
+        // pass the Open and Close toggle for the drawer layout listener
+        // to toggle the button
+        rootLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        // to make the Navigation drawer icon always appear on the action bar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void getPhotoList() {
@@ -174,5 +194,14 @@ public class HomeActivity extends AppCompatActivity {
         rvEmployees.setHasFixedSize(true);
         rvEmployees.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
         rvEmployees.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

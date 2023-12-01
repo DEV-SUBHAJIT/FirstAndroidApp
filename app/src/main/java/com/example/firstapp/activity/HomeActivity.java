@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +16,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -30,7 +31,11 @@ import com.bumptech.glide.Glide;
 import com.example.firstapp.R;
 import com.example.firstapp.adapter.PhotoAdapter;
 import com.example.firstapp.adapter.RecyclerViewAdapter;
+import com.example.firstapp.fragment.EmployeeFragment;
+import com.example.firstapp.fragment.HomeFragment;
 import com.example.firstapp.model.Employee;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -54,6 +59,9 @@ public class HomeActivity extends AppCompatActivity {
     private Button btnPost;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
+    private BottomNavigationView bottomNavigationView;
+    private FrameLayout frameLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +69,7 @@ public class HomeActivity extends AppCompatActivity {
 
         initView();
         setNavigation();
+        setBottomNavigation();
         clickEvent();
         getApiData();
 //        setEmployee();
@@ -90,6 +99,38 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    private void setBottomNavigation() {
+//        bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.bottom_home:
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.frameLayout, new HomeFragment())
+                                .commit();
+
+                      /*  getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.frameLayout, new HomeFragment())
+                                .commit();*/
+                        return true;
+
+                    case R.id.bottom_employee:
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.frameLayout, new EmployeeFragment())
+                                .commit();
+                        return true;
+                    default: return false;
+                }
+            }
+        });
+
+        bottomNavigationView.setSelectedItemId(R.id.bottom_home);
+    }
+
     private void clickEvent() {
         ivEmployee.setOnClickListener(v -> {
 //            startActivity(new Intent(this, EmployeeActivity.class));
@@ -111,6 +152,10 @@ public class HomeActivity extends AppCompatActivity {
 
         ivEmployee = findViewById(R.id.ivEmployee);
         btnPost = findViewById(R.id.btnPost);
+
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        frameLayout = findViewById(R.id.frameLayout);
+
     }
 
     private void setNavigation() {
@@ -204,4 +249,24 @@ public class HomeActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+  /*  @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.bottom_home:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout, new HomeFragment())
+                        .commit();
+                return true;
+
+            case R.id.bottom_employee:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout, new EmployeeFragment())
+                        .commit();
+                return true;
+            default: return false;
+        }
+    }*/
 }

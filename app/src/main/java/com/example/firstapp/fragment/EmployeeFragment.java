@@ -12,9 +12,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.firstapp.R;
+import com.example.firstapp.activity.HomeActivity;
 
 public class EmployeeFragment extends Fragment {
-private RecyclerView rvEmployees;
+private RecyclerView rvEmployee;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -26,8 +27,12 @@ private RecyclerView rvEmployees;
     }
 
     private void initView(View view) {
-        rvEmployees = view.findViewById(R.id.rvEmployees);
-        rvEmployees.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        ((HomeActivity) getActivity()).getSupportActionBar().setTitle("Employee");
+
+
+        rvEmployee = view.findViewById(R.id.rvEmployees);
+        rvEmployee.setLayoutManager(new LinearLayoutManager(requireActivity()));
+
     }
 
     private void getData() {

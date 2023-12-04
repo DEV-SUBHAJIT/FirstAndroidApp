@@ -18,7 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/holo_blue_light"
-            app:subtitle="Android app"
             app:subtitleTextColor="@android:color/holo_red_light"
             app:title="Home"
             app:titleTextColor="@color/white">

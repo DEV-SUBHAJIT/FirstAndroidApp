@@ -47,7 +47,6 @@ public class PostListActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     List<Post> posts = response.body();
 
-
                     binding.rvPost.setHasFixedSize(true);
                     binding.rvPost.setLayoutManager(new LinearLayoutManager(context));
                     binding.rvPost.setAdapter(new PostAdapter(posts));

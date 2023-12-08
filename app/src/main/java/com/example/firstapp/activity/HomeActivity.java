@@ -1,7 +1,11 @@
 package com.example.firstapp.activity;
 
+import static com.example.firstapp.utility.Utility.changeFragment;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -13,10 +17,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -35,7 +39,6 @@ import com.example.firstapp.fragment.EmployeeFragment;
 import com.example.firstapp.fragment.HomeFragment;
 import com.example.firstapp.model.Employee;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -104,12 +107,13 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.bottom_home:
-                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        changeFragment(getSupportFragmentManager(), R.id.frameLayout, new HomeFragment());
+                      /*  FragmentManager fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction()
                                 .replace(R.id.frameLayout, new HomeFragment())
-                                .commit();
+                                .commit();*/
 
                       /*  getSupportFragmentManager()
                                 .beginTransaction()
@@ -118,12 +122,14 @@ public class HomeActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.bottom_employee:
-                        getSupportFragmentManager()
+                        changeFragment(getSupportFragmentManager(), R.id.frameLayout, new EmployeeFragment());
+                        /*getSupportFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.frameLayout, new EmployeeFragment())
-                                .commit();
+                                .commit();*/
                         return true;
-                    default: return false;
+                    default:
+                        return false;
                 }
             }
         });
@@ -269,4 +275,53 @@ public class HomeActivity extends AppCompatActivity {
             default: return false;
         }
     }*/
+
+    boolean doublePress = false;
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            if (doublePress) {
+                super.onBackPressed();
+            } else {
+                doublePress = true;
+//                Snackbar.make(rootLayout, "Press again to exit", Snackbar.LENGTH_LONG).show();
+
+                //Create AlertDialog instance
+                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+
+                // Set alert dialog title
+                builder.setTitle("Warning!");
+
+                //Set alert dialog message
+                builder.setMessage("Do you want to quit this app right now?");
+
+                //Set positive button and negative button
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finishAffinity();
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+
+                //Show Alert Dialog
+                builder.show();
+
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doublePress = false;
+                    }
+                }, 2500);
+            }
+        }
+    }
 }

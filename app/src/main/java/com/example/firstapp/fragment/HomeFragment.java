@@ -1,6 +1,9 @@
 package com.example.firstapp.fragment;
 
+import static com.example.firstapp.utility.Utility.changeFragment;
+
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -45,7 +48,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
@@ -88,10 +91,11 @@ public class HomeFragment extends Fragment {
         itemClick = new OnItemClick() {
             @Override
             public void onItemClick(int position) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                changeFragment(getActivity().getSupportFragmentManager(), R.id.frameLayout,  new SubCategoryFragment(categoryList.get(position).getId(), categoryList.get(position).getCategoryName()));
+              /*  FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.frameLayout, new SubCategoryFragment(categoryList.get(position).getId()))
-                        .commit();
+                        .replace(R.id.frameLayout, new SubCategoryFragment(categoryList.get(position).getId(), categoryList.get(position).getCategoryName()))
+                        .commit();*/
             }
         };
     }

@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.firstapp.R;
+import com.example.firstapp.activity.HomeActivity;
 import com.example.firstapp.adapter.SubCategoryAdapter;
 import com.example.firstapp.api_response.SubCategoryResponse;
 import com.example.firstapp.event.OnItemClick;
@@ -30,9 +31,11 @@ public class SubCategoryFragment extends Fragment {
     private ProgressBar progressBar;
 
     private int categoryId;
+    private String categoryName;
 
-    public SubCategoryFragment(int categoryId) {
+    public SubCategoryFragment(int categoryId, String categoryName) {
         this.categoryId = categoryId;
+        this.categoryName = categoryName;
     }
 
     @Override
@@ -81,7 +84,8 @@ public class SubCategoryFragment extends Fragment {
     private void initView(View view) {
         rvSubCategory = view.findViewById(R.id.rvSubCategory);
         progressBar = view.findViewById(R.id.progressBar);
-
+        //Change toolbar title text
+        ((HomeActivity) getActivity()).getSupportActionBar().setTitle(categoryName);
     }
 
 

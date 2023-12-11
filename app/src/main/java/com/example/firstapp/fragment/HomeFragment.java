@@ -91,12 +91,16 @@ public class HomeFragment extends Fragment {
         itemClick = new OnItemClick() {
             @Override
             public void onItemClick(int position) {
-                changeFragment(getActivity().getSupportFragmentManager(), R.id.frameLayout,  new SubCategoryFragment(categoryList.get(position).getId(), categoryList.get(position).getCategoryName()));
+                Category category= categoryList.get(position);
+                changeFragment(getActivity().getSupportFragmentManager(), R.id.frameLayout,  new SubCategoryFragment(category.getId(), category.getCategoryName()));
               /*  FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.frameLayout, new SubCategoryFragment(categoryList.get(position).getId(), categoryList.get(position).getCategoryName()))
                         .commit();*/
             }
         };
+
+
+
     }
 }

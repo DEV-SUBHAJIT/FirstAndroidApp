@@ -4,6 +4,7 @@ import static com.example.firstapp.utility.Utility.changeFragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -37,8 +38,10 @@ import com.example.firstapp.adapter.PhotoAdapter;
 import com.example.firstapp.adapter.RecyclerViewAdapter;
 import com.example.firstapp.fragment.EmployeeFragment;
 import com.example.firstapp.fragment.HomeFragment;
+import com.example.firstapp.fragment.ShareFragment;
 import com.example.firstapp.model.Employee;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -48,7 +51,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Intent getValue;
     String nName, nEmail, mPassword, userId;
@@ -61,7 +64,7 @@ public class HomeActivity extends AppCompatActivity {
     ProgressBar progressBar;
     private Button btnPost;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-
+    private NavigationView navView;
     private BottomNavigationView bottomNavigationView;
     private FrameLayout frameLayout;
 
@@ -159,6 +162,7 @@ public class HomeActivity extends AppCompatActivity {
         ivEmployee = findViewById(R.id.ivEmployee);
         btnPost = findViewById(R.id.btnPost);
 
+        navView = findViewById(R.id.navView);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         frameLayout = findViewById(R.id.frameLayout);
 
@@ -166,15 +170,19 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setNavigation() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, rootLayout, R.string.nav_open, R.string.nav_close);
 
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, rootLayout, R.string.nav_open, R.string.nav_close);
         setSupportActionBar(toolbar);
+
         // pass the Open and Close toggle for the drawer layout listener
         // to toggle the button
         rootLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         // to make the Navigation drawer icon always appear on the action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        navView.setNavigationItemSelectedListener(HomeActivity.this);
+
     }
 
     private void getPhotoList() {
@@ -253,6 +261,8 @@ public class HomeActivity extends AppCompatActivity {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
+
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -284,12 +294,12 @@ public class HomeActivity extends AppCompatActivity {
             getSupportFragmentManager().popBackStack();
         } else {
             if (doublePress) {
-                super.onBackPressed();
+                finishAffinity();
             } else {
                 doublePress = true;
-//                Snackbar.make(rootLayout, "Press again to exit", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(rootLayout, "Press again to exit", Snackbar.LENGTH_LONG).show();
 
-                //Create AlertDialog instance
+             /*   //Create AlertDialog instance
                 AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
 
                 // Set alert dialog title
@@ -312,7 +322,7 @@ public class HomeActivity extends AppCompatActivity {
                 });
 
                 //Show Alert Dialog
-                builder.show();
+                builder.show();*/
 
 
                 new Handler().postDelayed(new Runnable() {
@@ -323,5 +333,29 @@ public class HomeActivity extends AppCompatActivity {
                 }, 2500);
             }
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_home:
+                changeFragment(getSupportFragmentManager(), R.id.frameLayout, new HomeFragment());
+                break;
+            case R.id.nav_share:
+                changeFragment(getSupportFragmentManager(), R.id.frameLayout, new ShareFragment());
+                break;
+            case R.id.nav_rate:
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" +getPackageName())));
+                } catch (Exception e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+getPackageName())));
+                }
+                break;
+
+            default:
+                Toast.makeText(this, "This fetchers is not available", Toast.LENGTH_SHORT).show();
+        }
+        rootLayout.closeDrawers();
+        return true;
     }
 }

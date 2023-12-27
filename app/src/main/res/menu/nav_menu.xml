@@ -13,6 +13,10 @@
         android:id="@+id/nav_rate"
         android:icon="@drawable/baseline_star_rate_24"
         android:title="Rate" />
+    <item
+        android:id="@+id/nav_bottom_dialog"
+        android:icon="@drawable/baseline_email_24"
+        android:title="Bottom Dialog" />
 
 
 </menu>

@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -41,6 +42,7 @@ import com.example.firstapp.fragment.HomeFragment;
 import com.example.firstapp.fragment.ShareFragment;
 import com.example.firstapp.model.Employee;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -67,6 +69,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navView;
     private BottomNavigationView bottomNavigationView;
     private FrameLayout frameLayout;
+
+    private BottomSheetDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -351,11 +355,35 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+getPackageName())));
                 }
                 break;
+            case R.id.nav_bottom_dialog:
+                try {
+                    createDialog();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
 
             default:
                 Toast.makeText(this, "This fetchers is not available", Toast.LENGTH_SHORT).show();
         }
         rootLayout.closeDrawers();
         return true;
+    }
+
+    private void createDialog() {
+        dialog = new BottomSheetDialog(this);
+        View view = getLayoutInflater().inflate(R.layout.bottom_dialog, null, false);
+        Button submit = view.findViewById(R.id.submit);
+        EditText name = view.findViewById(R.id.name);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                Toast.makeText(HomeActivity.this, name.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialog.setContentView(view);
+
+        dialog.show();
     }
 }

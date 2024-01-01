@@ -34,6 +34,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.example.firstapp.NewsActivity;
 import com.example.firstapp.R;
 import com.example.firstapp.adapter.PhotoAdapter;
 import com.example.firstapp.adapter.RecyclerViewAdapter;
@@ -41,6 +42,7 @@ import com.example.firstapp.fragment.EmployeeFragment;
 import com.example.firstapp.fragment.HomeFragment;
 import com.example.firstapp.fragment.ShareFragment;
 import com.example.firstapp.model.Employee;
+import com.example.firstapp.model.News;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
@@ -60,7 +62,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     int pinCode;
     boolean loginStatus;
     TextView textView;
-    ImageView /*ivImage1,*/ ivBanner, ivEmployee;
+    ImageView /*ivImage1,*/ ivBanner, ivEmployee, ivNews;
     DrawerLayout rootLayout;
     RecyclerView rvEmployees;
     ProgressBar progressBar;
@@ -149,6 +151,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 //            startActivity(new Intent(this, EmployeeActivity.class));
             startActivity(new Intent(this, UserListActivity.class));
         });
+        ivNews.setOnClickListener(v -> {
+            startActivity(new Intent(this, NewsActivity.class));
+        });
 
         btnPost.setOnClickListener(view -> {
             startActivity(new Intent(this, PostListActivity.class));
@@ -164,6 +169,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         progressBar = findViewById(R.id.progressBar);
 
         ivEmployee = findViewById(R.id.ivEmployee);
+        ivNews = findViewById(R.id.ivNews);
         btnPost = findViewById(R.id.btnPost);
 
         navView = findViewById(R.id.navView);

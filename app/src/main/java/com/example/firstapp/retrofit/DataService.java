@@ -1,6 +1,7 @@
 package com.example.firstapp.retrofit;
 
 import com.example.firstapp.api_response.CategoryResponse;
+import com.example.firstapp.api_response.NewsResponse;
 import com.example.firstapp.api_response.SubCategoryResponse;
 import com.example.firstapp.model.Post;
 
@@ -23,4 +24,7 @@ public interface DataService {
 
     @GET("/getSubCategory")
     Call<SubCategoryResponse> getSubCategory(@Query("categoryId") int categoryId);
+
+    @GET("/news")
+    Call<NewsResponse> getNews(@Query("limit") int limit, @Query("offset") int offset);
 }

@@ -45,7 +45,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         Picasso.get().load(news.getThumbnailUrl()).into(holder.ivThumbnail);
 
         holder.itemView.setOnClickListener(v -> {
-            context.startActivity(new Intent(context, NewsDetailsActivity.class).putExtra("news", news));
+            context.startActivity(new Intent(context, NewsDetailsActivity.class));
         });
     }
 

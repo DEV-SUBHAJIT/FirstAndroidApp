@@ -20,7 +20,7 @@
             android:name=".activity.NewsDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".NewsActivity"
+            android:name=".activity.NewsActivity"
             android:exported="false" />
         <activity
             android:name=".activity.PostListActivity"

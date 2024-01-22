@@ -58,7 +58,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     int pinCode;
     boolean loginStatus;
     TextView textView;
-    ImageView /*ivImage1,*/ ivBanner, ivEmployee, ivNews;
+    ImageView /*ivImage1,*/ ivBanner, ivEmployee, ivNews, ivSliteDb;
     DrawerLayout rootLayout;
     RecyclerView rvEmployees;
     ProgressBar progressBar;
@@ -147,6 +147,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 //            startActivity(new Intent(this, EmployeeActivity.class));
             startActivity(new Intent(this, UserListActivity.class));
         });
+        ivSliteDb.setOnClickListener(v -> {
+            startActivity(new Intent(this, SQLiteActivity.class));
+        });
         ivNews.setOnClickListener(v -> {
             startActivity(new Intent(this, NewsActivity.class));
         });
@@ -164,6 +167,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         rvEmployees = findViewById(R.id.rvEmployees);
         progressBar = findViewById(R.id.progressBar);
 
+        ivSliteDb = findViewById(R.id.ivSliteDb);
         ivEmployee = findViewById(R.id.ivEmployee);
         ivNews = findViewById(R.id.ivNews);
         btnPost = findViewById(R.id.btnPost);

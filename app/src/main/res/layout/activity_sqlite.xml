@@ -1,57 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activity.SQLiteActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        app:title="SQLite Database" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#DCDCDC" />
+
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense">
+        android:layout_margin="12dp">
+
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter your name"/>
+            android:hint="Enter your name" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense">
+        android:layout_margin="12dp">
+
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter your address"/>
+            android:hint="Enter your address"
+            android:maxLength="100" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense">
+        android:layout_margin="12dp">
+
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter your phone"/>
+            android:hint="Enter your phone" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense">
+        android:layout_margin="12dp">
+
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etAge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter your age"/>
+            android:hint="Enter your age" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
+        android:id="@+id/btnSubmit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnSubmi"/>
+        android:layout_margin="12dp"
+        android:text="Submit"
+        android:textAllCaps="false" />
 </LinearLayout>

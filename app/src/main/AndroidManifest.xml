@@ -19,11 +19,12 @@
         <activity
             android:name=".activity.SQLiteActivity"
             android:exported="false" />
-        <activity
-            android:name=".activity.NewsDetailsActivity"
-            android:exported="false" />
+
         <activity
             android:name=".activity.NewsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.NewsDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".activity.PostListActivity"
@@ -46,6 +47,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

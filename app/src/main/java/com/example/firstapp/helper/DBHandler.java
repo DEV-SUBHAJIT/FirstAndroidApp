@@ -2,11 +2,16 @@ package com.example.firstapp.helper;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import com.example.firstapp.model.SqlEmployee;
+
+import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
     private Context context;
@@ -16,7 +21,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "employee";
 
     // below int is our database version
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 4;
 
     // below variable is for our table name.
     private static final String TABLE_NAME = "employee_details";
@@ -35,6 +40,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // below variable is for our course tracks column.
     private static final String AGE_COL = "age";
+    private static final String EMAIL_COL="email";
+    private static final String SALARY_COL="salary";
 
     // creating a constructor for our database handler.
     public DBHandler(@Nullable Context context) {
@@ -53,7 +60,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 + NAME_COL + " TEXT,"
                 + ADDRESS_COL + " CHAR(100),"
                 + PHONE_COL + " TEXT,"
-                + AGE_COL + " INT)";
+                + AGE_COL + " INT,"
+                + SALARY_COL + " INT,"
+                +EMAIL_COL+ " TEXT )";
+
 
         // at last we are calling a exec sql
         // method to execute above sql query
@@ -67,9 +77,35 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public ArrayList<SqlEmployee> readEmployees()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursorEmployee = db.rawQuery("SELECT  *FROM " + TABLE_NAME, null);
+
+        ArrayList<SqlEmployee> employeeArrayList = new ArrayList<>();
+
+        if (cursorEmployee.moveToFirst()) {
+            do {
+                int id = cursorEmployee.getInt(0);
+                String name = cursorEmployee.getString(1);
+                String address = cursorEmployee.getString(2);
+                String phone = cursorEmployee.getString(3);
+                int age = cursorEmployee.getInt(4);
+                int salary = cursorEmployee.getInt(5);
+                String email = cursorEmployee.getString(6);
+
+                employeeArrayList.add(new SqlEmployee(id, salary, age, name , address, email, phone));
+            } while (cursorEmployee.moveToNext());
+            // moving our cursor to next.
+        }
+
+        cursorEmployee.close();
+        return employeeArrayList;
+    }
 
     // this method is use to add new course to our sqlite database.
-    public void addNewData(String name, String address, String phoneNumber, int age) {
+    public void addNewData(String name, String address, String phoneNumber, int age,String email, int salary) {
 
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
@@ -86,6 +122,8 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(ADDRESS_COL, address);
         values.put(PHONE_COL, phoneNumber);
         values.put(AGE_COL, age);
+        values.put(EMAIL_COL,email);
+        values.put(SALARY_COL,salary);
 
         // after adding all values we are passing
         // content values to our table.

@@ -107,8 +107,10 @@ public class SQLiteActivity extends AppCompatActivity implements OnItemClick {
 
             dbHandler.updateEmployee(updateEmployeeId, mName, mAddress, mPhone, Integer.parseInt(mAge), mEmail, Integer.parseInt(mSalary));
 
+            Toast.makeText(mContext, "Update successful", Toast.LENGTH_SHORT).show();
+
             sqlEmployeeList = dbHandler.readEmployees();
-            adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this::onItemClick);
+            adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this);
             binding.rvEmployees.setAdapter(adapter);
 
             binding.etName.setText("");
@@ -129,9 +131,13 @@ public class SQLiteActivity extends AppCompatActivity implements OnItemClick {
         // Toast message on menu item clicked
         dbHandler.deleteEmployee(sqlEmployeeList.get(position).getId());
 
+        Toast.makeText(mContext, sqlEmployeeList.get(position).getName()+" Delete successful", Toast.LENGTH_SHORT).show();
+
         sqlEmployeeList = dbHandler.readEmployees();
-        adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this::onItemClick);
+        adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this);
         binding.rvEmployees.setAdapter(adapter);
 
+        binding.btnUpdate.setVisibility(View.GONE);
+        binding.btnSubmit.setVisibility(View.VISIBLE);
     }
 }

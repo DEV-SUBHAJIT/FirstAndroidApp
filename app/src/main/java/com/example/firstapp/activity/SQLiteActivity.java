@@ -4,25 +4,29 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.firstapp.adapter.SqlEmployeeAdapter;
 import com.example.firstapp.databinding.ActivitySqliteBinding;
+import com.example.firstapp.event.OnItemClick;
 import com.example.firstapp.helper.DBHandler;
 import com.example.firstapp.model.SqlEmployee;
 
 import java.util.List;
 
-public class SQLiteActivity extends AppCompatActivity {
+public class SQLiteActivity extends AppCompatActivity implements OnItemClick {
     private Context mContext = SQLiteActivity.this;
     private ActivitySqliteBinding binding;
 
     private DBHandler dbHandler;
-
+    private int updateEmployeeId;
+    private List<SqlEmployee> sqlEmployeeList;
+    private SqlEmployeeAdapter adapter;
+    private OnItemClick itemClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,28 +35,52 @@ public class SQLiteActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         dbHandler = new DBHandler(mContext);
+        sqlEmployeeList = dbHandler.readEmployees();
 
-        List<SqlEmployee> sqlEmployeeList = dbHandler.readEmployees();
+        itemClick = position -> {
+            binding.btnUpdate.setVisibility(View.VISIBLE);
+            binding.btnSubmit.setVisibility(View.GONE);
+
+            SqlEmployee employee = sqlEmployeeList.get(position);
+            binding.etName.setText(employee.getName());
+            binding.etAddress.setText(employee.getAddress());
+            binding.etAge.setText(String.valueOf(employee.getAge()));
+            binding.etAddress.setText(employee.getAddress());
+            binding.etPhone.setText(employee.getPhone());
+            binding.etSalary.setText(String.valueOf(employee.getSalary()));
+            binding.etEmail.setText(employee.getEmail());
+
+            updateEmployeeId = employee.getId();
+        };
+
+        //Adapter initialize
+        adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this::onItemClick);
+
 
         binding.rvEmployees.setHasFixedSize(true);
-        binding.rvEmployees.setLayoutManager(new GridLayoutManager(mContext, 3));
-        binding.rvEmployees.setAdapter(new SqlEmployeeAdapter(sqlEmployeeList));
+        binding.rvEmployees.setLayoutManager(new LinearLayoutManager(mContext));
+        binding.rvEmployees.setAdapter(adapter);
 
 
+        //Submit button click handel
         binding.btnSubmit.setOnClickListener(v -> {
             String mName = binding.etName.getText().toString();
             String mAddress = binding.etAddress.getText().toString();
             String mPhone = binding.etPhone.getText().toString();
             String mAge = binding.etAge.getText().toString();
-            String mEmail=binding.etEmail.getText().toString();
+            String mEmail = binding.etEmail.getText().toString();
             String mSalary = binding.etSalary.getText().toString();
 
-            if (TextUtils.isEmpty(mName) || TextUtils.isEmpty(mAddress) || TextUtils.isEmpty(mPhone) || TextUtils.isEmpty(mAge)||TextUtils.isEmpty(mEmail)) {
+            if (TextUtils.isEmpty(mName) || TextUtils.isEmpty(mAddress) || TextUtils.isEmpty(mPhone) || TextUtils.isEmpty(mAge) || TextUtils.isEmpty(mEmail)) {
                 Toast.makeText(mContext, "Fill all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            dbHandler.addNewData(mName, mAddress, mPhone, Integer.parseInt(mAge),mEmail, Integer.parseInt(mSalary));
+            dbHandler.addNewEmployee(mName, mAddress, mPhone, Integer.parseInt(mAge), mEmail, Integer.parseInt(mSalary));
+
+            sqlEmployeeList = dbHandler.readEmployees();
+            adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this::onItemClick);
+            binding.rvEmployees.setAdapter(adapter);
 
             binding.etName.setText("");
             binding.etAddress.setText("");
@@ -61,6 +89,49 @@ public class SQLiteActivity extends AppCompatActivity {
             binding.etEmail.setText("");
             binding.etSalary.setText("");
         });
+
+
+        //Update button Click Handel
+        binding.btnUpdate.setOnClickListener(v -> {
+            String mName = binding.etName.getText().toString();
+            String mAddress = binding.etAddress.getText().toString();
+            String mPhone = binding.etPhone.getText().toString();
+            String mAge = binding.etAge.getText().toString();
+            String mEmail = binding.etEmail.getText().toString();
+            String mSalary = binding.etSalary.getText().toString();
+
+            if (TextUtils.isEmpty(mName) || TextUtils.isEmpty(mAddress) || TextUtils.isEmpty(mPhone) || TextUtils.isEmpty(mAge) || TextUtils.isEmpty(mEmail)) {
+                Toast.makeText(mContext, "Fill all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            dbHandler.updateEmployee(updateEmployeeId, mName, mAddress, mPhone, Integer.parseInt(mAge), mEmail, Integer.parseInt(mSalary));
+
+            sqlEmployeeList = dbHandler.readEmployees();
+            adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this::onItemClick);
+            binding.rvEmployees.setAdapter(adapter);
+
+            binding.etName.setText("");
+            binding.etAddress.setText("");
+            binding.etPhone.setText("");
+            binding.etAge.setText("");
+            binding.etEmail.setText("");
+            binding.etSalary.setText("");
+
+            binding.btnUpdate.setVisibility(View.GONE);
+            binding.btnSubmit.setVisibility(View.VISIBLE);
+        });
+
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        // Toast message on menu item clicked
+        dbHandler.deleteEmployee(sqlEmployeeList.get(position).getId());
+
+        sqlEmployeeList = dbHandler.readEmployees();
+        adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this::onItemClick);
+        binding.rvEmployees.setAdapter(adapter);
 
     }
 }

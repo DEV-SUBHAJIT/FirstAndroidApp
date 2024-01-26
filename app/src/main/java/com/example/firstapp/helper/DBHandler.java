@@ -105,7 +105,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // this method is use to add new course to our sqlite database.
-    public void addNewData(String name, String address, String phoneNumber, int age,String email, int salary) {
+    public void addNewEmployee(String name, String address, String phoneNumber, int age, String email, int salary) {
 
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
@@ -134,5 +134,39 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
 
         Toast.makeText(context, "Data insert successful", Toast.LENGTH_SHORT).show();
+    }
+
+    public void updateEmployee(int id, String name, String address, String phoneNumber, int age,String email, int salary) {
+
+        // calling a method to get writable database.
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        // on below line we are passing all values
+        // along with its key and value pair.
+        values.put(NAME_COL, name);
+        values.put(ADDRESS_COL, address);
+        values.put(PHONE_COL, phoneNumber);
+        values.put(AGE_COL, age);
+        values.put(EMAIL_COL,email);
+        values.put(SALARY_COL,salary);
+
+        // on below line we are calling a update method to update our database and passing our values.
+        // and we are comparing it with name of our employee which is stored in original name variable.
+        db.update(TABLE_NAME, values, "id=?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    // below is the method for deleting our employee.
+    public void deleteEmployee(int id) {
+
+        // on below line we are creating
+        // a variable to write our database.
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // on below line we are calling a method to delete our
+        // course and we are comparing it with our employee name.
+        db.delete(TABLE_NAME, "id=?", new String[]{String.valueOf(id)});
+        db.close();
     }
 }

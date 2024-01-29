@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,7 @@ public class SQLiteActivity extends AppCompatActivity implements OnItemClick {
         binding = ActivitySqliteBinding.inflate(LayoutInflater.from(mContext));
         setContentView(binding.getRoot());
 
+        setDropdownData();
         dbHandler = new DBHandler(mContext);
         sqlEmployeeList = dbHandler.readEmployees();
 
@@ -70,13 +72,14 @@ public class SQLiteActivity extends AppCompatActivity implements OnItemClick {
             String mAge = binding.etAge.getText().toString();
             String mEmail = binding.etEmail.getText().toString();
             String mSalary = binding.etSalary.getText().toString();
+            String mGender = binding.actvSpinner.getText().toString().trim();
 
-            if (TextUtils.isEmpty(mName) || TextUtils.isEmpty(mAddress) || TextUtils.isEmpty(mPhone) || TextUtils.isEmpty(mAge) || TextUtils.isEmpty(mEmail)) {
+            if (TextUtils.isEmpty(mName) || TextUtils.isEmpty(mAddress) || TextUtils.isEmpty(mPhone) || TextUtils.isEmpty(mAge) || TextUtils.isEmpty(mEmail) || TextUtils.isEmpty(mGender)) {
                 Toast.makeText(mContext, "Fill all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            dbHandler.addNewEmployee(mName, mAddress, mPhone, Integer.parseInt(mAge), mEmail, Integer.parseInt(mSalary));
+            dbHandler.addNewEmployee(mName, mAddress, mPhone, Integer.parseInt(mAge), mEmail, Integer.parseInt(mSalary), mGender);
 
             sqlEmployeeList = dbHandler.readEmployees();
             adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this::onItemClick);
@@ -99,13 +102,14 @@ public class SQLiteActivity extends AppCompatActivity implements OnItemClick {
             String mAge = binding.etAge.getText().toString();
             String mEmail = binding.etEmail.getText().toString();
             String mSalary = binding.etSalary.getText().toString();
+            String mGender = binding.actvSpinner.getText().toString().trim();
 
-            if (TextUtils.isEmpty(mName) || TextUtils.isEmpty(mAddress) || TextUtils.isEmpty(mPhone) || TextUtils.isEmpty(mAge) || TextUtils.isEmpty(mEmail)) {
+            if (TextUtils.isEmpty(mName) || TextUtils.isEmpty(mAddress) || TextUtils.isEmpty(mPhone) || TextUtils.isEmpty(mAge) || TextUtils.isEmpty(mEmail) || TextUtils.isEmpty(mGender)) {
                 Toast.makeText(mContext, "Fill all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            dbHandler.updateEmployee(updateEmployeeId, mName, mAddress, mPhone, Integer.parseInt(mAge), mEmail, Integer.parseInt(mSalary));
+            dbHandler.updateEmployee(updateEmployeeId, mName, mAddress, mPhone, Integer.parseInt(mAge), mEmail, Integer.parseInt(mSalary), mGender);
 
             Toast.makeText(mContext, "Update successful", Toast.LENGTH_SHORT).show();
 
@@ -126,12 +130,21 @@ public class SQLiteActivity extends AppCompatActivity implements OnItemClick {
 
     }
 
+    private void setDropdownData() {
+        String[] items = new String[]{"Male", "Female", "Others"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        //set the spinners adapter to the previously created one.
+        binding.actvSpinner.setAdapter(adapter);
+
+        binding.actvSpinner.getText().toString();
+    }
+
     @Override
     public void onItemClick(int position) {
         // Toast message on menu item clicked
         dbHandler.deleteEmployee(sqlEmployeeList.get(position).getId());
 
-        Toast.makeText(mContext, sqlEmployeeList.get(position).getName()+" Delete successful", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, sqlEmployeeList.get(position).getName() + " Delete successful", Toast.LENGTH_SHORT).show();
 
         sqlEmployeeList = dbHandler.readEmployees();
         adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this);

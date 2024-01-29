@@ -8,8 +8,9 @@ public class SqlEmployee {
     private String address;
     private String email;
     private String phone;
+    private  String gender;
 
-    public SqlEmployee(int id, int salary, int age, String name, String address, String email, String phone) {
+    public SqlEmployee(int id, int salary, int age, String name, String address, String email, String phone, String gender) {
         this.id = id;
         this.salary = salary;
         this.age = age;
@@ -17,6 +18,7 @@ public class SqlEmployee {
         this.address = address;
         this.email = email;
         this.phone = phone;
+        this.gender = gender;
     }
 
     public int getId() {
@@ -45,5 +47,9 @@ public class SqlEmployee {
 
     public String getPhone() {
         return phone;
+    }
+
+    public String getGender() {
+        return gender;
     }
 }

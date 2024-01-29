@@ -21,7 +21,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "employee";
 
     // below int is our database version
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 5;
 
     // below variable is for our table name.
     private static final String TABLE_NAME = "employee_details";
@@ -40,8 +40,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // below variable is for our course tracks column.
     private static final String AGE_COL = "age";
-    private static final String EMAIL_COL="email";
-    private static final String SALARY_COL="salary";
+    private static final String EMAIL_COL = "email";
+    private static final String SALARY_COL = "salary";
+    private static final String GENDER_COL = "gender";
 
     // creating a constructor for our database handler.
     public DBHandler(@Nullable Context context) {
@@ -62,8 +63,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + PHONE_COL + " TEXT,"
                 + AGE_COL + " INT,"
                 + SALARY_COL + " INT,"
-                +EMAIL_COL+ " TEXT )";
-
+                + GENDER_COL + " TEXT,"
+                + EMAIL_COL + " TEXT )";
 
         // at last we are calling a exec sql
         // method to execute above sql query
@@ -73,12 +74,12 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // this method is called to check if the table exists already.
+//        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + GENDER_COL + " TEXT;");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
 
-    public ArrayList<SqlEmployee> readEmployees()
-    {
+    public ArrayList<SqlEmployee> readEmployees() {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursorEmployee = db.rawQuery("SELECT  *FROM " + TABLE_NAME, null);
@@ -93,9 +94,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 String phone = cursorEmployee.getString(3);
                 int age = cursorEmployee.getInt(4);
                 int salary = cursorEmployee.getInt(5);
-                String email = cursorEmployee.getString(6);
+                String gender = cursorEmployee.getString(6);
+                String email = cursorEmployee.getString(7);
 
-                employeeArrayList.add(new SqlEmployee(id, salary, age, name , address, email, phone));
+                employeeArrayList.add(new SqlEmployee(id, salary, age, name, address, email, phone, gender));
             } while (cursorEmployee.moveToNext());
             // moving our cursor to next.
         }
@@ -105,7 +107,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // this method is use to add new course to our sqlite database.
-    public void addNewEmployee(String name, String address, String phoneNumber, int age, String email, int salary) {
+    public void addNewEmployee(String name, String address, String phoneNumber, int age, String email, int salary, String gender) {
 
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
@@ -122,8 +124,9 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(ADDRESS_COL, address);
         values.put(PHONE_COL, phoneNumber);
         values.put(AGE_COL, age);
-        values.put(EMAIL_COL,email);
-        values.put(SALARY_COL,salary);
+        values.put(EMAIL_COL, email);
+        values.put(SALARY_COL, salary);
+        values.put(GENDER_COL, gender);
 
         // after adding all values we are passing
         // content values to our table.
@@ -136,7 +139,7 @@ public class DBHandler extends SQLiteOpenHelper {
         Toast.makeText(context, "Data insert successful", Toast.LENGTH_SHORT).show();
     }
 
-    public void updateEmployee(int id, String name, String address, String phoneNumber, int age,String email, int salary) {
+    public void updateEmployee(int id, String name, String address, String phoneNumber, int age, String email, int salary, String gender) {
 
         // calling a method to get writable database.
         SQLiteDatabase db = this.getWritableDatabase();
@@ -148,8 +151,9 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(ADDRESS_COL, address);
         values.put(PHONE_COL, phoneNumber);
         values.put(AGE_COL, age);
-        values.put(EMAIL_COL,email);
-        values.put(SALARY_COL,salary);
+        values.put(EMAIL_COL, email);
+        values.put(SALARY_COL, salary);
+        values.put(GENDER_COL, gender);
 
         // on below line we are calling a update method to update our database and passing our values.
         // and we are comparing it with name of our employee which is stored in original name variable.

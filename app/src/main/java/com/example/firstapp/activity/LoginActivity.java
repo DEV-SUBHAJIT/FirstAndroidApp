@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,8 @@ public class LoginActivity extends AppCompatActivity {
     DatabaseReference myRef;
     FirebaseDatabase database;
     FirebaseAuth mAuth;
+
+    private CheckBox cvRemember;
 
     String email, password;
     EditText etEmail, etPassword;
@@ -55,12 +59,14 @@ public class LoginActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
 
+        cvRemember = findViewById(R.id.cvRemember);
+
 
         btnLogin.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
-           /* email = etEmail.getText().toString().trim();
+          /*  email = etEmail.getText().toString().trim();
             password = etPassword.getText().toString().trim();
 
 
@@ -79,8 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
 
                         }
-                    });
-*/
+                    });*/
         });
 
         tvRegister.setOnClickListener(v -> {
@@ -88,6 +93,20 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        cvRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (isChecked){
+                    editor.putBoolean("isLoggedIn", true);
+                } else {
+                    editor.remove("isLoggedIn");
+                }
+                editor.apply();
+
+            }
+        });
 
     }
 
@@ -96,13 +115,16 @@ public class LoginActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 User user = task.getResult().getValue(User.class);
 
-                SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (cvRemember.isChecked()){
+                    SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                editor.putString("UserName", user.getName());
-                editor.putString("UserEmail", user.getEmail());
-                editor.putBoolean("isLoggedIn", true);
-                editor.apply();
+                    editor.putString("UserName", user.getName());
+                    editor.putString("UserEmail", user.getEmail());
+                    editor.putBoolean("isLoggedIn", true);
+                    editor.apply();
+                }
+
 
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                 intent.putExtra("name", user.getName());
@@ -114,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 startActivity(intent);
             } else {
-                Toast.makeText(LoginActivity.this, "" + String.valueOf(task.getResult().getValue()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "" + task.getResult().getValue(), Toast.LENGTH_SHORT).show();
             }
         });
     }

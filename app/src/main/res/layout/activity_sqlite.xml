@@ -67,7 +67,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Enter your phone"
-                    android:inputType="phone" />
+                    android:inputType="phone"
+                    android:maxLength="10" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -81,8 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Enter your age"
-                    android:inputType="numberDecimal"
-                    android:maxLength="10" />
+                    android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -117,13 +117,14 @@
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Gender"
-                android:layout_margin="12dp">
+                android:layout_margin="12dp"
+                android:hint="Gender">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/actvSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:simpleItems="@array/gender"
                     android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 

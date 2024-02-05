@@ -14,12 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.firstapp.adapter.SqlEmployeeAdapter;
 import com.example.firstapp.databinding.ActivitySqliteBinding;
 import com.example.firstapp.event.OnItemClick;
+import com.example.firstapp.event.PopUpClick;
 import com.example.firstapp.helper.DBHandler;
 import com.example.firstapp.model.SqlEmployee;
 
 import java.util.List;
 
-public class SQLiteActivity extends AppCompatActivity implements OnItemClick {
+public class SQLiteActivity extends AppCompatActivity {
     private Context mContext = SQLiteActivity.this;
     private ActivitySqliteBinding binding;
 
@@ -27,7 +28,7 @@ public class SQLiteActivity extends AppCompatActivity implements OnItemClick {
     private int updateEmployeeId;
     private List<SqlEmployee> sqlEmployeeList;
     private SqlEmployeeAdapter adapter;
-    private OnItemClick itemClick;
+    private PopUpClick popUpClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,28 +36,45 @@ public class SQLiteActivity extends AppCompatActivity implements OnItemClick {
         binding = ActivitySqliteBinding.inflate(LayoutInflater.from(mContext));
         setContentView(binding.getRoot());
 
-        setDropdownData();
+//        setDropdownData();
         dbHandler = new DBHandler(mContext);
         sqlEmployeeList = dbHandler.readEmployees();
 
-        itemClick = position -> {
-            binding.btnUpdate.setVisibility(View.VISIBLE);
-            binding.btnSubmit.setVisibility(View.GONE);
+        popUpClick = (position, menuItem) -> {
+            if (menuItem.getTitle().toString().equals("Edit")) {
+                binding.btnUpdate.setVisibility(View.VISIBLE);
+                binding.btnSubmit.setVisibility(View.GONE);
 
-            SqlEmployee employee = sqlEmployeeList.get(position);
-            binding.etName.setText(employee.getName());
-            binding.etAddress.setText(employee.getAddress());
-            binding.etAge.setText(String.valueOf(employee.getAge()));
-            binding.etAddress.setText(employee.getAddress());
-            binding.etPhone.setText(employee.getPhone());
-            binding.etSalary.setText(String.valueOf(employee.getSalary()));
-            binding.etEmail.setText(employee.getEmail());
+                SqlEmployee employee = sqlEmployeeList.get(position);
+                binding.etName.setText(employee.getName());
+                binding.etAddress.setText(employee.getAddress());
+                binding.etAge.setText(String.valueOf(employee.getAge()));
+                binding.etAddress.setText(employee.getAddress());
+                binding.etPhone.setText(employee.getPhone());
+                binding.etSalary.setText(String.valueOf(employee.getSalary()));
+                binding.etEmail.setText(employee.getEmail());
 
-            updateEmployeeId = employee.getId();
+                updateEmployeeId = employee.getId();
+            } else if (menuItem.getTitle().toString().equals("Delete")) {
+                // Toast message on menu item clicked
+                dbHandler.deleteEmployee(sqlEmployeeList.get(position).getId());
+
+                Toast.makeText(mContext, sqlEmployeeList.get(position).getName() + " Delete successful", Toast.LENGTH_SHORT).show();
+
+                sqlEmployeeList = dbHandler.readEmployees();
+                adapter = new SqlEmployeeAdapter(sqlEmployeeList, popUpClick);
+                binding.rvEmployees.setAdapter(adapter);
+
+                binding.btnUpdate.setVisibility(View.GONE);
+                binding.btnSubmit.setVisibility(View.VISIBLE);
+            } else {
+                Toast.makeText(mContext, ""+menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+            }
+
         };
 
         //Adapter initialize
-        adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this::onItemClick);
+        adapter = new SqlEmployeeAdapter(sqlEmployeeList, popUpClick);
 
 
         binding.rvEmployees.setHasFixedSize(true);
@@ -82,7 +100,7 @@ public class SQLiteActivity extends AppCompatActivity implements OnItemClick {
             dbHandler.addNewEmployee(mName, mAddress, mPhone, Integer.parseInt(mAge), mEmail, Integer.parseInt(mSalary), mGender);
 
             sqlEmployeeList = dbHandler.readEmployees();
-            adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this::onItemClick);
+            adapter = new SqlEmployeeAdapter(sqlEmployeeList, popUpClick);
             binding.rvEmployees.setAdapter(adapter);
 
             binding.etName.setText("");
@@ -114,7 +132,7 @@ public class SQLiteActivity extends AppCompatActivity implements OnItemClick {
             Toast.makeText(mContext, "Update successful", Toast.LENGTH_SHORT).show();
 
             sqlEmployeeList = dbHandler.readEmployees();
-            adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this);
+            adapter = new SqlEmployeeAdapter(sqlEmployeeList, popUpClick);
             binding.rvEmployees.setAdapter(adapter);
 
             binding.etName.setText("");
@@ -131,26 +149,9 @@ public class SQLiteActivity extends AppCompatActivity implements OnItemClick {
     }
 
     private void setDropdownData() {
-        String[] items = new String[]{"Male", "Female", "Others"};
+        String[] items = new String[]{"Male", "Female", "Others", "Test gender"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         //set the spinners adapter to the previously created one.
         binding.actvSpinner.setAdapter(adapter);
-
-        binding.actvSpinner.getText().toString();
-    }
-
-    @Override
-    public void onItemClick(int position) {
-        // Toast message on menu item clicked
-        dbHandler.deleteEmployee(sqlEmployeeList.get(position).getId());
-
-        Toast.makeText(mContext, sqlEmployeeList.get(position).getName() + " Delete successful", Toast.LENGTH_SHORT).show();
-
-        sqlEmployeeList = dbHandler.readEmployees();
-        adapter = new SqlEmployeeAdapter(sqlEmployeeList, itemClick, this);
-        binding.rvEmployees.setAdapter(adapter);
-
-        binding.btnUpdate.setVisibility(View.GONE);
-        binding.btnSubmit.setVisibility(View.VISIBLE);
     }
 }

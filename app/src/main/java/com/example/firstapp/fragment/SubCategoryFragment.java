@@ -1,15 +1,18 @@
 package com.example.firstapp.fragment;
 
+import static com.example.firstapp.utility.Utility.changeFragment;
+
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firstapp.R;
 import com.example.firstapp.activity.HomeActivity;
@@ -54,14 +57,17 @@ public class SubCategoryFragment extends Fragment {
             @Override
             public void onResponse(Call<SubCategoryResponse> call, Response<SubCategoryResponse> response) {
                 progressBar.setVisibility(View.GONE);
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     SubCategoryResponse subCategoryResponse = response.body();
 
-                    OnItemClick itemClick = position -> Toast.makeText(requireActivity(), "Click position no: "+ position, Toast.LENGTH_SHORT).show();
+                    OnItemClick itemClick = position -> {
+                        changeFragment(getActivity().getSupportFragmentManager(), R.id.frameLayout, new ProductListFragment(subCategoryResponse.getSubCategoryList().get(position).getId(),
+                                (subCategoryResponse.getSubCategoryList().get(position).getSubCategoryName())));
+                    };
 
-                    if (subCategoryResponse.isStatus()){
+                    if (subCategoryResponse.isStatus()) {
                         List<SubCategory> subCategoryList = subCategoryResponse.getSubCategoryList();
-                        if (subCategoryList.size()>0){
+                        if (subCategoryList.size() > 0) {
                             rvSubCategory.setHasFixedSize(true);
                             rvSubCategory.setAdapter(new SubCategoryAdapter(subCategoryList, itemClick));
                         } else
@@ -75,7 +81,7 @@ public class SubCategoryFragment extends Fragment {
 
             @Override
             public void onFailure(Call<SubCategoryResponse> call, Throwable t) {
-                Toast.makeText(requireActivity(), ""+ t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
             }
         });
@@ -86,6 +92,11 @@ public class SubCategoryFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBar);
         //Change toolbar title text
         ((HomeActivity) getActivity()).getSupportActionBar().setTitle(categoryName);
+
+        rvSubCategory.setHasFixedSize(true);
+        rvSubCategory.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+
+//        rvSubCategory.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
     }
 
 

@@ -61,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
 
         cvRemember = findViewById(R.id.cvRemember);
 
-
         btnLogin.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);

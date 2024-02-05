@@ -80,6 +80,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setBottomNavigation();
         clickEvent();
         getApiData();
+
 //        setEmployee();
         getPhotoList();
 

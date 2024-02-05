@@ -2,7 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/mEdit"
+        android:title="Edit" />
+
+    <item
         android:id="@+id/mDelete"
-        android:icon="@android:drawable/ic_menu_delete"
         android:title="Delete" />
 </menu>

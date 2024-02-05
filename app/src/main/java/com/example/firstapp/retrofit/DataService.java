@@ -27,4 +27,9 @@ public interface DataService {
 
     @GET("/news")
     Call<NewsResponse> getNews(@Query("limit") int limit, @Query("offset") int offset);
+
+//    @GET("/product")
+//    Call<ProductResponse> getProducts(@Query("subCategoryId") int subCategoryId);
+
+
 }

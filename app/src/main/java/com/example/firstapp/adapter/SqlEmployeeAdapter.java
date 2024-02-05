@@ -6,15 +6,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firstapp.R;
 import com.example.firstapp.databinding.EmployeeItemBinding;
-import com.example.firstapp.event.OnItemClick;
-import com.example.firstapp.helper.DBHandler;
+import com.example.firstapp.event.PopUpClick;
 import com.example.firstapp.model.SqlEmployee;
 
 import java.util.List;
@@ -22,13 +20,11 @@ import java.util.List;
 public class SqlEmployeeAdapter extends RecyclerView.Adapter<SqlEmployeeAdapter.MyViewHolder> {
     Context context;
     List<SqlEmployee> sqlEmployeeList;
-    private OnItemClick onItemClick;
-    private OnItemClick onItemDeleteClick;
+    private PopUpClick popUpClick;
 
-    public SqlEmployeeAdapter(List<SqlEmployee> sqlEmployeeList, OnItemClick onItemClick, OnItemClick onItemDeleteClick) {
+    public SqlEmployeeAdapter(List<SqlEmployee> sqlEmployeeList, PopUpClick popUpClick) {
         this.sqlEmployeeList = sqlEmployeeList;
-        this.onItemClick = onItemClick;
-        this.onItemDeleteClick = onItemDeleteClick;
+        this.popUpClick = popUpClick;
     }
 
     @NonNull
@@ -67,20 +63,19 @@ public class SqlEmployeeAdapter extends RecyclerView.Adapter<SqlEmployeeAdapter.
 
             binding.card.setVisibility(View.GONE);
 
-            binding.getRoot().setOnClickListener(v -> onItemClick.onItemClick(position));
-
             binding.getRoot().setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    PopupMenu popupMenu = new PopupMenu(context, binding.tvName);
+                    PopupMenu popupMenu = new PopupMenu(context, binding.getRoot());
 
                     // Inflating popup menu from popup_menu.xml file
                     popupMenu.getMenuInflater().inflate(R.menu.pop_up_menu, popupMenu.getMenu());
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem menuItem) {
-                         onItemDeleteClick.onItemClick(position);
+                            popUpClick.onItemClick(position, menuItem);
                             return true;
+
                         }
                     });
                     // Showing the popup menu

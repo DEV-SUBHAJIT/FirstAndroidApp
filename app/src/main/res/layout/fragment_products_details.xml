@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.ProductsDetails">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginVertical="8dp"
+            android:orientation="vertical"
+            app:cardCornerRadius="12dp">
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:layout_width="270dp"-->
+<!--                android:layout_height="270dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                app:cardElevation="4dp">-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/ivImage"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:scaleType="fitXY"-->
+<!--                    android:src="@drawable/sari" />-->
+<!--            </androidx.cardview.widget.CardView>-->
+
+            <com.denzcoskun.imageslider.ImageSlider
+                android:id="@+id/image_slider"
+                android:layout_width="wrap_content"
+                android:layout_height="300dp"
+                app:iss_auto_cycle="true"
+                app:iss_period="1000"
+                app:iss_delay="1000"
+                app:iss_text_align="CENTER"/>
+
+            <TextView
+                android:id="@+id/tvPn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="12dp"
+                android:textSize="16sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvColor"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/avColor"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:layout_height="wrap_content"
+
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rvSize"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Color"
+                android:textSize="16sp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rvColor"/>
+
+            <RatingBar
+                android:id="@+id/rbBar"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:progressTint="#FF0000"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvMrp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginHorizontal="10dp"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginStart="20dp"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:elevation="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:background="@color/grey_color">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="ADD TO CART"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:drawableEnd="@drawable/baseline_shopping_cart_24"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:id="@+id/tvCart"
+                    android:textColor="@color/black"
+                    >
+                </TextView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="ORDER"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:id="@+id/ivBuy"
+                    android:background="@color/theme_color"
+                    android:textColor="@color/white"
+                    >
+                </TextView>
+            </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</FrameLayout>

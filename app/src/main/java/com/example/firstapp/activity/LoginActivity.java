@@ -1,8 +1,10 @@
 package com.example.firstapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -13,11 +15,19 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firstapp.R;
+import com.example.firstapp.api_response.UserRespons;
 import com.example.firstapp.model.User;
+import com.example.firstapp.model.UserModel;
+import com.example.firstapp.retrofit.DataService;
+import com.example.firstapp.retrofit.RetrofitClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -62,9 +72,9 @@ public class LoginActivity extends AppCompatActivity {
         cvRemember = findViewById(R.id.cvRemember);
 
         btnLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+           /* Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
-            finish();
+            finish();*/
           /*  email = etEmail.getText().toString().trim();
             password = etPassword.getText().toString().trim();
 
@@ -85,6 +95,9 @@ public class LoginActivity extends AppCompatActivity {
 
                         }
                     });*/
+
+            login();
+
         });
 
         tvRegister.setOnClickListener(v -> {
@@ -107,6 +120,53 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void login() {
+        String mobile  = etEmail.getText().toString();
+        if (TextUtils.isEmpty(mobile)|| mobile.length() != 10){
+            etEmail.setError("Enter proper value");
+            return;
+        }
+
+        DataService service = RetrofitClient.getDataService();
+        Call<UserRespons> call = service.getUser(mobile);
+
+        call.enqueue(new Callback<UserRespons>() {
+            @Override
+            public void onResponse(Call<UserRespons> call, Response<UserRespons> response) {
+                if (response.isSuccessful() && response.body()!=null){
+                    UserRespons userRespons = response.body();
+                    if (userRespons.isStatus()){
+                       UserModel userModel= userRespons.getUserModel();
+                       if (userModel!= null){
+                           //Shore details in Shared Preference
+                           SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", MODE_PRIVATE);
+                           SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                           editor.putString("fullName", userModel.getFullName());
+                           editor.putString("email", userModel.getEmail());
+                           editor.putString("mobileNumber", userModel.getMobileNumber());
+                           editor.putString("gender", userModel.getGender());
+                           editor.putString("imageUrl", userModel.getImageUrl());
+                           editor.putInt("id", userModel.getId());
+                           editor.putBoolean("isLoggedIn", true);
+                           editor.apply();
+
+                           Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                           startActivity(intent);
+                           finish();
+
+                       } else Toast.makeText(getApplicationContext(), "No useer found", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserRespons> call, Throwable t) {
+
+            }
+        });
     }
 
     private void getUserDetails(String uId) {

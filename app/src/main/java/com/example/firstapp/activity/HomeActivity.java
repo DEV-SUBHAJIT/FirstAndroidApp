@@ -37,6 +37,7 @@ import com.example.firstapp.adapter.PhotoAdapter;
 import com.example.firstapp.adapter.RecyclerViewAdapter;
 import com.example.firstapp.fragment.EmployeeFragment;
 import com.example.firstapp.fragment.HomeFragment;
+import com.example.firstapp.fragment.OrderFragment;
 import com.example.firstapp.fragment.ShareFragment;
 import com.example.firstapp.model.Employee;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -58,7 +59,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     int pinCode;
     boolean loginStatus;
     TextView textView;
-    ImageView /*ivImage1,*/ ivBanner, ivEmployee, ivNews, ivSliteDb;
+    ImageView /*ivImage1,*/ ivBanner, ivEmployee, ivNews, ivSliteDb,ivCart;
     DrawerLayout rootLayout;
     RecyclerView rvEmployees;
     ProgressBar progressBar;
@@ -134,6 +135,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                 .replace(R.id.frameLayout, new EmployeeFragment())
                                 .commit();*/
                         return true;
+
+                    case R.id.bottom_order:
+                        changeFragment(getSupportFragmentManager(), R.id.frameLayout, new OrderFragment());
+                        return  true;
+
                     default:
                         return false;
                 }
@@ -158,6 +164,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         btnPost.setOnClickListener(view -> {
             startActivity(new Intent(this, PostListActivity.class));
         });
+
+        ivCart.setOnClickListener(v ->{
+            startActivity(new Intent(this, CartActivity.class));
+        });
     }
 
     private void initView() {
@@ -172,6 +182,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         ivEmployee = findViewById(R.id.ivEmployee);
         ivNews = findViewById(R.id.ivNews);
         btnPost = findViewById(R.id.btnPost);
+        ivCart=findViewById(R.id.ivCart);
 
         navView = findViewById(R.id.navView);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
